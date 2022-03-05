@@ -1,0 +1,17 @@
+{
+  "name": "user-manager",
+  "version": "1.1.0",
+  "description": "A Simple user manager service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "users"
+  ],
+  "author": "Reza Salari",
+  "license": "MIT",
+  "dependencies": {
+    "maya-data-parser": "^1.0.1"
+  }
+}
