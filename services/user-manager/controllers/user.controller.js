@@ -15,21 +15,16 @@ module.exports = class UserController {
   async createUser(req, res) {
     try {
       const user = await userModel.save(req);
-      
-      if (user) {
+      if (user && user.rows.length>0) {
         res.statusCode = c.statusCodes.SUCCESS;
         res.setHeader("Content-Type", c.contentTypes.JSON);
-       return res.end(JSON.stringify(req.data));
-      
+        return res.end(JSON.stringify( ...user.rows));
       } else {
+    
         res.statusCode = c.statusCodes.CONFLICT;
         res.setHeader("Content-Type", c.contentTypes.JSON);
-       return res.end(JSON.stringify('UserName Conflict !!'));
-        
+        return res.end(JSON.stringify("UserName Conflict !!"));
       }
-      
     } catch (error) {}
-  
-   
   }
 };

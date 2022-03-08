@@ -8,8 +8,7 @@ module.exports = class UserModel {
         "username",
         `${req.username}`
       );
-      
-      if (isExistUsername.rowCount == 0) {
+      if (!isExistUsername.rows.length > 0) {
         return await queryBuilder.alfaOrm.save(req.data, "users");
       }
     } catch (error) {}

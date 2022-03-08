@@ -1,13 +1,16 @@
 const jwt = require("jsonwebtoken");
-const { createToken, refreshToken } = require("../../../helper/jwt");
+const { createToken, refreshToken, token } = require("../../../helper/jwt");
 const queryBuilder = require("../../..");
 const { statusCodes, contentTypes } = require("../../../config");
+
 module.exports = class AuthModel {
   async login(req, res) {
+    
     let isExistUser=await queryBuilder.alfaOrm.find('users','username',req.data.username);
+
     if (isExistUser.rows.length) {
       let user = isExistUser.rows[0];
-      user.token = await createToken({id:user.id,role:user.role});
+      user.token = await token({id:user.id,role:user.role});
       user.refreshToken = await refreshToken({id:user.id,role:user.role});
       return user;
     } else {

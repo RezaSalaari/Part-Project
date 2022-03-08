@@ -4,13 +4,15 @@ const dataParser = require('strict-data-parser');
 const isAuthenticate = require("../../../middlewares/isAuthenticate");
 const { UserEnum } = require("../../user-manager/entities/user.enum");
 const hasAccess = require("../../../middlewares/hasAccess");
+const productValidator = require("../../../validators/product.schema");
+const productSchema = require("../../../validators/product.schema");
 
 let productControler = new ProductControler();
 module.exports = {
   "/products": {
     POST: {
       function: productControler.createProduct,
-      middlewares: [dataParser,isAuthenticate,Validator('product'),hasAccess],
+      middlewares: [dataParser,isAuthenticate,Validator(productSchema),hasAccess],
       roles:[UserEnum.SUPPORT]
     },
     GET: {
