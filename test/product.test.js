@@ -6,14 +6,15 @@ const TOKEN =
 
 describe("Product Api", function () {
   let credential = {
-    assigned_to: "1",
+    "assigned_to": "1",
   };
   it("Should be created Product for user ID = assigned_to", async function () {
     await axios
       .post(URL, credential, { headers: { Authorization: `Bearer ${TOKEN}` } })
       .then((axiosResponse) => {
-        let userObject = axiosResponse.data;
-        assert.ok(userObject);
+        let productObject = axiosResponse.data;
+        console.log(productObject);
+        assert.ok(productObject);
       })
       .catch((res) => {
         assert.fail(res);
@@ -24,7 +25,7 @@ describe("Product Api", function () {
     await axios
       .get(URL, { headers: { Authorization: `Bearer ${TOKEN}` } })
       .then((response) => {
-          assert.ok(response)
+          assert.ok(response.data)
       }).catch((err)=>{
           assert.fail(err)
       })
