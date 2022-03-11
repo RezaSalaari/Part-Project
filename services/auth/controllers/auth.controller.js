@@ -1,6 +1,6 @@
+const Responses = require("../../../config/response");
 const AuthModel = require("../models/auth.model");
-const c = require("./../config");
-
+const responses = new Responses();
 let authModel = new AuthModel();
 
 module.exports = class AuthController {
@@ -8,9 +8,11 @@ module.exports = class AuthController {
     const user = await authModel.login(req, res);
     if (user) {
       delete user.password;
-      res.writeHead(200, { "Content-type": "application/json" });
-      res.write(JSON.stringify({ user }));
-      res.end();
+      return responses.Response_200_Data(req, res, user);
+    } else {
+      return responses.Response_404_Data(req, res, {
+        message: "userName or Password Is Wrong",
+      });
     }
   }
 };

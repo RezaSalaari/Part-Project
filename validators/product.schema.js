@@ -1,8 +1,6 @@
-const { string } = require('joi');
-const Joi = require('joi');
+const { string } = require("joi");
+const Joi = require("joi");
 
-module.exports= Joi.object({
-    assigned_to:Joi.string().required(),
+module.exports = Joi.object({
+  assigned_to: Joi.string().required(),
 });
-
-

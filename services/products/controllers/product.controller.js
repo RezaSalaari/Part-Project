@@ -1,37 +1,29 @@
-const c = require("../../../config");
+const Responses = require("../../../config/response");
 const ProductModel = require("./../models/product.model");
+const response = new Responses();
 let productModel = new ProductModel();
 module.exports = class ProductsController {
   async findByRole(req, res) {
-    try {
-      const products = await productModel.findByRole(req, res);
-      if (products) {
-        res.statusCode = c.statusCodes.SUCCESS;
-        res.setHeader("Content-Type", c.contentTypes.JSON);
-        return res.end(JSON.stringify(products.rows));
-      }
-    } catch (error) {}
+    const products = await productModel.findByRole(req, res);
+    if (products != undefined) {
+      return response.Response_200_Data(req, res, products.rows);
+    } else {
+      return response.Response_400_Data(req, res, {
+        message: "only Suppurt And Empolye can view them product",
+      });
+    }
   }
   async createProduct(req, res) {
-    try {
-      const product = await productModel.save(req, res);
-      if (product.rows && product.rows.length != 0) {
-        res.statusCode = c.statusCodes.SUCCESS;
-        res.setHeader("Content-Type", c.contentTypes.JSON);
-        return res.end(JSON.stringify(...product.rows));
-      }
-    } catch (error) {}
+    const product = await productModel.save(req, res);
+    if (product != undefined)
+      return response.Response_200_Data(req, res, product.rows);
+    else {
+      return response.Response_500_Data(req, res, { message: "DB Error" });
+    }
   }
 
   async getAll(req, res) {
-    try {
-      let products = await productModel.getAll(req, res);
-    res.statusCode = c.statusCodes.SUCCESS;
-    res.setHeader("Content-Type", c.contentTypes.JSON);
-    return res.end(JSON.stringify(products.rows));
-    } catch (error) {
-      
-    }
-    
+    let products = await productModel.getAll(req, res);
+    return response.Response_200_Data(req, res, products.rows);
   }
 };

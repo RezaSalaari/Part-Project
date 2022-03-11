@@ -1,14 +1,15 @@
+require('dotenv').config()
 const jwt = require("jsonwebtoken");
-const { jwtConstants } = require("../services/auth/config");
-require('dotenv').config
+const  jwtConfig = require("../config/jwt").jwtConfig;
+
 exports.token = async (user) => {
-  return await jwt.sign({user:user}, jwtConstants.accessKey, {
-    expiresIn: jwtConstants.expireAcessTime,
+  return await jwt.sign({user:user}, jwtConfig.accessKey, {
+    expiresIn: jwtConfig.expireAcessTime,
   });
 };
 
 exports.refreshToken = async (user) => {
-  return await jwt.sign({user:user}, jwtConstants.accessKey, {
-    expiresIn: jwtConstants.expireRefreshTime,
+  return await jwt.sign({user:user}, jwtConfig.accessKey, {
+    expiresIn: jwtConfig.expireRefreshTime,
   });
 };

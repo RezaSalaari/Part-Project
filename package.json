@@ -15,6 +15,7 @@
   "dependencies": {
     "alfaorm": "^1.0.3",
     "alfavalidator": "^1.0.2",
+    "app-root-path": "^3.0.0",
     "dotenv": "^16.0.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "8.7.3",

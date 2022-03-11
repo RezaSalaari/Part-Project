@@ -1,4 +1,4 @@
-const routes = require('./routes/auth.route');
+const routes = require("./routes/auth.route");
 
 module.exports = {
   routes,

@@ -1,14 +1,9 @@
 const queryBuilder = require("../../../");
-const c = require("../../../config");
 const makeid = require("../../../helper/idGenerator");
 const { UserEnum } = require("../../user-manager/entities/user.enum");
 
 module.exports = class ProductModel {
-  /*
-  @param(role)
-  This method returns products based on the role
-  */
-  async findByRole(req, res) { 
+  async findByRole(req, res) {
     try {
       let keySearch =
         req.user.user.role == UserEnum.SUPPORT ? "operator" : "assigned_to";
@@ -18,11 +13,7 @@ module.exports = class ProductModel {
         req.user.user.id
       );
       return products;
-    } catch (error) {
-      res.statusCode = c.statusCodes.INTERNAL;
-      res.setHeader("Content-Type", c.contentTypes.JSON);
-      res.end(JSON.stringify("INTERNAL SERVER ERRROR "));
-    }
+    } catch (error) {}
   }
 
   async save(req, res) {
@@ -41,15 +32,15 @@ module.exports = class ProductModel {
       req.data.operator = req.user.user.id;
       return await queryBuilder.alfaOrm.save(req.data, "products");
     } catch (error) {
-      res.statusCode = c.statusCodes.INTERNAL;
-      res.setHeader("Content-Type", c.contentTypes.JSON);
-      res.end(JSON.stringify("INTERNAL SERVER ERRROR "));
+      console.log(error);
     }
   }
 
   async getAll(req, res) {
     try {
       return await queryBuilder.alfaOrm.findAll("products");
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
