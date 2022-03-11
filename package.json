@@ -4,7 +4,7 @@
   "description": "Sample backend project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "cross-env NODE_PATH=. node index.js"
   },
   "repository": {
@@ -17,6 +17,8 @@
     "alfaorm": "^1.0.3",
     "alfavalidator": "^1.0.2",
     "app-root-path": "^3.0.0",
+    "axios": "^0.26.1",
+    "chai": "^4.3.6",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.0",
     "enforce-node-path": "^1.0.0",
@@ -25,6 +27,10 @@
     "stric-router": "^1.0.1",
     "strict-data-parser": "^1.0.0",
     "strict-server": "^1.0.1",
+    "supertest": "^6.2.2",
     "wavy": "^1.0.4"
+  },
+  "devDependencies": {
+    "mocha": "^9.2.1"
   }
 }
