@@ -1,11 +1,10 @@
 const Validator = require("alfavalidator");
-const ProductControler = require("../controllers/product.controller");
+const ProductControler = require('~/services/products/controllers/product.controller');
 const dataParser = require("strict-data-parser");
-const isAuthenticate = require("../../../middlewares/isAuthenticate");
-const { UserEnum } = require("../../user-manager/entities/user.enum");
-const productValidator = require("../../../validators/product.schema");
-const productSchema = require("../../../validators/product.schema");
-const isAccess = require("../../../middlewares/isAccess");
+const isAuthenticate = require('~/middlewares/isAuthenticate');
+const { UserEnum } = require('~/services/user-manager/entities/user.enum');
+const productSchema = require('~/validators/product.schema');
+const isAccess = require('~/middlewares/isAccess');
 
 let productControler = new ProductControler();
 module.exports = {

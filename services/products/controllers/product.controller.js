@@ -1,5 +1,5 @@
-const Responses = require("../../../config/response");
-const ProductModel = require("./../models/product.model");
+const Responses = require('~/config/response');
+const ProductModel = require('~/services/products/models/product.model');
 const response = new Responses();
 let productModel = new ProductModel();
 module.exports = class ProductsController {

@@ -1,6 +1,6 @@
-const queryBuilder = require("../../..");
-const UserModel = require("../models/user.model");
-const Responses = require("../../../config/response");
+const queryBuilder = require('~/index');
+const UserModel = require('~/services/user-manager/models/user.model');
+const Responses = require('~/config/response');
 let userModel = new UserModel();
 const response = new Responses();
 

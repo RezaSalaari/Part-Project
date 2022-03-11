@@ -1,7 +1,7 @@
 const Validator = require("alfavalidator");
-const AuthController = require("../controllers/auth.controller");
+const AuthController = require('~/services/auth/controllers/auth.controller');
 const dataParser = require("strict-data-parser");
-const loginSchema = require("../../../validators/login.schema");
+const loginSchema = require('~/validators/login.schema');
 
 let authController = new AuthController();
 module.exports = {

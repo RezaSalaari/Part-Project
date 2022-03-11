@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const { createToken, refreshToken, token } = require("../../../helper/jwt");
-const queryBuilder = require("../../..");
+const { createToken, refreshToken, token } = require('~/helper/jwt');
+const queryBuilder = require('~/index');
 
 module.exports = class AuthModel {
   async login(req, res) {

@@ -1,6 +1,6 @@
-const queryBuilder = require("../../../");
-const makeid = require("../../../helper/idGenerator");
-const { UserEnum } = require("../../user-manager/entities/user.enum");
+const queryBuilder = require('~/index');
+const makeid = require('~/helper/idGenerator');
+const { UserEnum } = require('~/services/user-manager/entities/user.enum');
 
 module.exports = class ProductModel {
   async findByRole(req, res) {

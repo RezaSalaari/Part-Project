@@ -1,5 +1,5 @@
-const Responses = require("../../../config/response");
-const AuthModel = require("../models/auth.model");
+const Responses = require('~/config/response');
+const AuthModel = require('~/services/auth/models/auth.model');
 const responses = new Responses();
 let authModel = new AuthModel();
 

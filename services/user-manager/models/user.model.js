@@ -1,6 +1,6 @@
-const queryBuilder = require("../../..");
-const Responses = require("../../../config/response");
-const { UserEnum } = require("../entities/user.enum");
+const queryBuilder = require('~/index');
+const Responses = require('~/config/response');
+const { UserEnum } = require('~/services/user-manager/entities/user.enum');
 const response = new Responses();
 module.exports = class UserModel {
   async save(req, res) {

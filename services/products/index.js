@@ -1,5 +1,5 @@
-const routes = require("./routes/product.route");
-const schema = require("./entities/product.schema");
+const routes = require('~/services/products/routes/product.route');
+const schema = require('~/services/products/entities/product.schema');
 module.exports = {
   routes,
   schema,

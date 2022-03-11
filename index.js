@@ -1,4 +1,3 @@
-const appRoot = require("app-root-path");
 const fs = require("fs");
 const EventEmitter = require("events");
 const Server = require("strict-server");
@@ -54,4 +53,3 @@ function loadApps() {
   }
 }
 module.exports.alfaOrm = alfaOrm;
-module.exports.appRoot = appRoot;
