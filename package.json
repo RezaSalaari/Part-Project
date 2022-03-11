@@ -19,7 +19,7 @@
     "dotenv": "^16.0.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "8.7.3",
-    "stric-router": "^1.0.0",
+    "stric-router": "^1.0.1",
     "strict-data-parser": "^1.0.0",
     "strict-server": "^1.0.1"
   }
