@@ -44,7 +44,7 @@ function loadApps() {
       tables.push(...Object.values(app["schema"]));
     }
   });
-  if (tables) {
+  if (tables && tables.length) {
     try {
       alfaOrm.createTable(tables);
     } catch (error) {
