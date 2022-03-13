@@ -5,7 +5,15 @@ const ticketModel = new TicketModel();
 
 module.exports = class TicketController {
   async save(req, res) {
-    const ticket = await ticketModel.save(req, res);
-    return response.Response_200_Data(req, res, { data: ticket.rows });
+    try {
+      let ticket = await ticketModel.save(req, res);
+      ticket = { ...ticket.rows };
+      return response.Response_200_Data(req, res, ticket);
+    } catch (error) {
+      if (error.statusCode === 403)
+        return response.Response_400_Data(req, res, {
+          message: "this user is not owned the product:",
+        });
+    }
   }
 };
