@@ -31,5 +31,16 @@ $$;
         completed_At TIMESTAMPTZ,
         CONSTRAINT fk_userId FOREIGN KEY(userId) REFERENCES users(id),
         CONSTRAINT fk_operator FOREIGN KEY(operator) REFERENCES users(id));
-        
+
+
+        CREATE TABLE IF NOT EXISTS comments(
+         id SERIAL PRIMARY KEY,
+         ticketId INT,
+         subject text,
+         content text,
+         category text,
+         liked BOOLEAN DEFAULT 'f',
+         CONSTRAINT fk_ticketId FOREIGN KEY(ticketId) REFERENCES tickets(id));
+         
+         
         COMMIT;`;
