@@ -23,10 +23,11 @@ $$;
     CREATE TABLE IF NOT EXISTS tickets(
         id SERIAL PRIMARY KEY,
         status ticketStatusENUM DEFAULT ('0'),
-        priority ticketPriority DEFAULT('1') ,
+        priority ticketPriority,
         userId INT NOT NULL,
         itemId INT NOT NULL,
         operator INT ,
+        solved BOOLEAN,
         created_At TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         completed_At TIMESTAMPTZ,
         CONSTRAINT fk_userId FOREIGN KEY(userId) REFERENCES users(id),
@@ -40,6 +41,7 @@ $$;
          content text,
          category text,
          liked BOOLEAN DEFAULT 'f',
+         created_At TIMESTAMPTZ NOT NULL DEFAULT NOW(),
          CONSTRAINT fk_ticketId FOREIGN KEY(ticketId) REFERENCES tickets(id));
          
          
