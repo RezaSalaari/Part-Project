@@ -23,7 +23,7 @@ module.exports = {
     },
     "/tickets/filter":{
       POST: {
-        function: ticketController.filterByDate,
+        function: ticketController.filter,
         middlewares: [
           dataParser,
           isAuthenticate,

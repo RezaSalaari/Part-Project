@@ -3,7 +3,7 @@ const Responses = require("~/config/response");
 const {
   ticketPriorityEnum,
 } = require("~/services/tickets/entities/ticket-priority.enum");
-const { Error_403 } = require("~/error/errors");
+const { Error_403 } = require('~/constant/errors');
 const { UserEnum } = require("~/services/user-manager/entities/user.enum");
 const response = new Responses();
 
@@ -39,12 +39,15 @@ module.exports = class TicketModel {
     }
   }
 
-  async filterByDate(req, res) {
-  
-    let query = `SELECT * FROM tickets LEFT JOIN comments ON tickets.id = comments.ticketId`;
+  async filter(req, res) {
+
+    let query =
+      `SELECT 
+    subject,content,category,liked,status,tickets.created_at,tickets.id
+     FROM comments LEFT JOIN tickets ON tickets.id = comments.ticketId`;
     let conditions = [];
     const role = req.user.user.role;
-    
+
     if (req.data.fromDate && req.data.toDate)
       conditions.push(this._FilterByBetweenDates(req.data.fromDate, req.data.toDate));
     else if (req.data.fromDate)
@@ -55,11 +58,25 @@ module.exports = class TicketModel {
     if (role == UserEnum.EMPLOYE) {
       conditions.push(`userId = ${req.user.user.id}`);
     }
+    if (role == UserEnum.SUPPORT) {
+      if (req.data.assigned_to) {
+        conditions.push(`userId = ${req.data.assigned_to}`)
+      }
+      if (req.data.assigned_operator) {
+        conditions.push(`operator = ${req.user.user.id}`)
+      }
+    }
+
+    if (req.data.status) {
+      conditions.push(`status = '${req.data.status}'`);
+    }
+
 
     if (conditions.length > 0) {
       query += (' WHERE ' + conditions.join(' AND '));
     }
-    console.log(query);
+
+  
     return await orm.alfaOrm.query(query);
   }
 
