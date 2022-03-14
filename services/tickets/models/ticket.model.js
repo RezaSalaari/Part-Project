@@ -44,7 +44,7 @@ module.exports = class TicketModel {
     let query = `SELECT * FROM tickets LEFT JOIN comments ON tickets.id = comments.ticketId`;
     let conditions = [];
     const role = req.user.user.role;
-
+    
     if (req.data.fromDate && req.data.toDate)
       conditions.push(this._FilterByBetweenDates(req.data.fromDate, req.data.toDate));
     else if (req.data.fromDate)
@@ -59,21 +59,21 @@ module.exports = class TicketModel {
     if (conditions.length > 0) {
       query += (' WHERE ' + conditions.join(' AND '));
     }
-  
+    console.log(query);
     return await orm.alfaOrm.query(query);
   }
 
 
 
-  _FilterDateByLessThanOrEqual(query, toDate) {
-    return (`tickets.created_at <= ${toDate}`);
+  _FilterDateByLessThanOrEqual(toDate) {
+    return (`tickets.created_at <= '${toDate}' `);
   }
 
   _FilterDateByMoreThanOrEqual(fromDate) {
-    return (`tickets.created_at >= '${fromDate}'`);
+    return (`tickets.created_at >= '${fromDate}' `);
   }
 
   _FilterByBetweenDates(fromDate, toDate) {
-    return (`tickets.created_at BETWEEN ${fromDate} AND ${toDate}`);
+    return (`tickets.created_at BETWEEN '${fromDate}' AND '${toDate}' `);
   }
 };
