@@ -9,7 +9,7 @@ const ticketController =new TicketController()
 
 
 module.exports = {
-    "/tickets": {
+    "/tickets/new": {
       POST: {
         function: ticketController.save,
         middlewares: [
@@ -21,4 +21,15 @@ module.exports = {
         roles: [UserEnum.EMPLOYE],
       },
     },
+    "/tickets/filter":{
+      POST: {
+        function: ticketController.filterByDate,
+        middlewares: [
+          dataParser,
+          isAuthenticate,
+          isAccess,
+        ],
+        roles: [UserEnum.EMPLOYE,UserEnum.SUPPORT],
+      },
+    }
   };

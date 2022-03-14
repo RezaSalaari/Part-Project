@@ -16,4 +16,9 @@ module.exports = class TicketController {
         });
     }
   }
+
+  async filterByDate(req, res) {
+    const tickets =await ticketModel.filterByDate(req, res);
+    return response.Response_200_Data(req,res,{...tickets.rows})
+  }
 };
