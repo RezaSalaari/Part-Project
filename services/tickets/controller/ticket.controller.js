@@ -11,7 +11,7 @@ module.exports = class TicketController {
       return response.Response_200_Data(req, res, ticket);
     } catch (error) {
       if (error.statusCode === 403)
-        return response.Response_400_Data(req, res, {
+        return response.Response_403_Data(req, res, {
           message: "this user is not owned the product:",
         });
     }

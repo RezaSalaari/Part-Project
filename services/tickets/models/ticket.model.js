@@ -31,6 +31,7 @@ module.exports = class TicketModel {
             content: req.data.content,
             liked: req.data.liked || false,
             ticketId: ticket.rows[0].id,
+            creator: req.user.user.role == UserEnum.SUPPORT ? 'SUPPORT' : 'EMPLOYEE'
           };
           return await orm.alfaOrm.save(commentDto, "comments");
         }
@@ -94,8 +95,8 @@ module.exports = class TicketModel {
           `UPDATE tickets SET
          operator = ${req.user.user.id},
          status = '${TicketStatusEnum.IN_PROGRESS}'
-         where id = ${ticket.rows[0].id}`
-        
+         where id = ${ticket.rows[0].id} RETURNING *`
+
         return await orm.alfaOrm.query(query);
       } else {
         throw new Error_403('This ticket has already been resolved or has an operator')
