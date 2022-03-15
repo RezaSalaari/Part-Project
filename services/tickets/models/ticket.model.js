@@ -3,8 +3,9 @@ const Responses = require("~/config/response");
 const {
   ticketPriorityEnum,
 } = require("~/services/tickets/entities/ticket-priority.enum");
-const { Error_403 } = require('~/constant/errors');
+const { Error_403, Error_404 } = require('~/constant/errors');
 const { UserEnum } = require("~/services/user-manager/entities/user.enum");
+const { TicketStatusEnum } = require("~/services/tickets/entities/ticket-status.enum");
 const response = new Responses();
 
 module.exports = class TicketModel {
@@ -76,10 +77,34 @@ module.exports = class TicketModel {
       query += (' WHERE ' + conditions.join(' AND '));
     }
 
-  
+
     return await orm.alfaOrm.query(query);
   }
 
+
+  async assignToOperator(req, res) {
+    let ticket = await orm.alfaOrm.find('tickets', 'id', req.data.ticketId);
+
+    if (ticket && ticket.rows && ticket.rows.length) {
+      const withoutOperator = ticket.rows.find(item => item.operator == undefined);
+      const notSolved = ticket.rows.find(item => item.solved == false)
+
+      if (withoutOperator && notSolved) {
+        const query =
+          `UPDATE tickets SET
+         operator = ${req.user.user.id},
+         status = '${TicketStatusEnum.IN_PROGRESS}'
+         where id = ${ticket.rows[0].id}`
+        
+        return await orm.alfaOrm.query(query);
+      } else {
+        throw new Error_403('This ticket has already been resolved or has an operator')
+      }
+    } else {
+      throw new Error_404('not Found Ticket')
+    }
+
+  }
 
 
   _FilterDateByLessThanOrEqual(toDate) {

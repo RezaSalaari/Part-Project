@@ -18,7 +18,17 @@ module.exports = class TicketController {
   }
 
   async filter(req, res) {
-    const tickets =await ticketModel.filter(req, res);
-    return response.Response_200_Data(req,res,{...tickets.rows})
+    const tickets = await ticketModel.filter(req, res);
+    return response.Response_200_Data(req, res, { ...tickets.rows })
+  }
+
+  async assignToOperator(req, res) {
+    try {
+      const ticket = await ticketModel.assignToOperator(req, res);
+      return response.Response_200_Data(req,res,{...ticket.rows})
+    } catch (error) {
+      if (error.statusCode == 404) return response.Response_404_Data(req, res, { message: error.message });
+      if (error.statusCode == 403) return response.Response_403_Data(req, res, { message: error.message });
+    }
   }
 };

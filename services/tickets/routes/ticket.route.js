@@ -31,5 +31,18 @@ module.exports = {
         ],
         roles: [UserEnum.EMPLOYE,UserEnum.SUPPORT],
       },
+    },
+    '/tickets/support':{
+      POST:{
+        function: ticketController.assignToOperator,
+        middlewares: [
+          dataParser,
+          isAuthenticate,
+          isAccess,
+        ],
+        roles: [UserEnum.SUPPORT],
+      },
+      }
     }
-  };
+
+  
