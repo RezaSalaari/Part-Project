@@ -38,4 +38,9 @@ module.exports = class Responses {
     res.write(JSON.stringify({ obj }));
     return res.end()
   };
+  Response_403_Data =async (req, res, obj) => {
+    res.writeHead(403, { "Content-type": "application/json" });
+    res.write(JSON.stringify({ obj }));
+    return res.end();
+  };
 };
