@@ -5,6 +5,9 @@ const isAuthenticate = require('~/middlewares/isAuthenticate');
 const Validator = require('alfavalidator');
 const ticketSchema = require('~/validators/ticket.schema');
 const isAccess = require('~/middlewares/isAccess');
+const ticketFilterSchema = require('~/validators/ticket-filter.schema');
+const ticketAssignToSupport = require('~/validators/ticket-assign-To-support');
+const replyTicket = require('~/validators/reply-ticket');
 const ticketController =new TicketController()
 
 
@@ -27,6 +30,7 @@ module.exports = {
         middlewares: [
           dataParser,
           isAuthenticate,
+          Validator(ticketFilterSchema),
           isAccess,
         ],
         roles: [UserEnum.EMPLOYE,UserEnum.SUPPORT],
@@ -38,6 +42,7 @@ module.exports = {
         middlewares: [
           dataParser,
           isAuthenticate,
+          Validator(ticketAssignToSupport),
           isAccess,
         ],
         roles: [UserEnum.SUPPORT],
@@ -49,6 +54,7 @@ module.exports = {
           middlewares: [
             dataParser,
             isAuthenticate,
+            Validator(replyTicket),
             isAccess,
           ],
           roles: [UserEnum.SUPPORT,UserEnum.EMPLOYE],
