@@ -38,7 +38,7 @@ $$;
          id SERIAL PRIMARY KEY,
          ticketId INT,
          subject text,
-         creator INT,
+         creator text,
          content text,
          category text,
          liked BOOLEAN DEFAULT 'f',
