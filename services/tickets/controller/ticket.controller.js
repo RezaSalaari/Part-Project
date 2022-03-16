@@ -27,8 +27,8 @@ module.exports = class TicketController {
       const ticket = await ticketModel.assignToOperator(req, res);
       return response.Response_200_Data(req, res, { ...ticket.rows })
     } catch (error) {
-      if (error.statusCode == 404) return response.Response_404_Data(req, res, { message: error.message });
-      if (error.statusCode == 403) return response.Response_403_Data(req, res, { message: error.message });
+      if (error.statusCode == 404) return response.Response_404_Data(req, res, { message: error.name });
+      if (error.statusCode == 403) return response.Response_403_Data(req, res, { message: error.name });
     }
   }
 
@@ -37,8 +37,19 @@ module.exports = class TicketController {
       const ticket = await ticketModel.reply(req, res)
       return response.Response_200_Data(req, res, { ...ticket.rows })
     } catch (error) {
-      if (error.statusCode == 404) return response.Response_404_Data(req, res, { message: error.message });
-      if (error.statusCode == 403) return response.Response_403_Data(req, res, { message: error.message });
+      if (error.statusCode == 404) return response.Response_404_Data(req, res, { message: error.name });
+      if (error.statusCode == 403) return response.Response_403_Data(req, res, { message: error.name });
+    }
+  }
+
+
+  async completedTicket(req,res){
+    try {
+      const ticket = await ticketModel.completedTicket(req,res);
+      return response.Response_200_Data(req,res,{...ticket.rows})
+    } catch (error) {
+      if (error.statusCode == 404) return response.Response_404_Data(req, res, { message: error.name });
+      if (error.statusCode == 403) return response.Response_403_Data(req, res, { message: error.name });
     }
   }
 };

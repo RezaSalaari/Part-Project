@@ -3,9 +3,11 @@ const Responses = require("~/config/response");
 const {
   ticketPriorityEnum,
 } = require("~/services/tickets/entities/ticket-priority.enum");
-const { Error_403, Error_404 } = require('~/constant/errors');
+const { Error_403, Error_404 } = require("~/constant/errors");
 const { UserEnum } = require("~/services/user-manager/entities/user.enum");
-const { TicketStatusEnum } = require("~/services/tickets/entities/ticket-status.enum");
+const {
+  TicketStatusEnum,
+} = require("~/services/tickets/entities/ticket-status.enum");
 const response = new Responses();
 
 module.exports = class TicketModel {
@@ -31,7 +33,8 @@ module.exports = class TicketModel {
             content: req.data.content,
             liked: req.data.liked || false,
             ticketId: ticket.rows[0].id,
-            creator: req.user.user.role == UserEnum.SUPPORT ? 'SUPPORT' : 'EMPLOYEE'
+            creator:
+              req.user.user.role == UserEnum.SUPPORT ? "SUPPORT" : "EMPLOYEE",
           };
           return await orm.alfaOrm.save(commentDto, "comments");
         }
@@ -42,16 +45,16 @@ module.exports = class TicketModel {
   }
 
   async filter(req, res) {
-
-    let query =
-      `SELECT 
+    let query = `SELECT 
     subject,content,category,liked,status,comments.created_at
      FROM comments LEFT JOIN tickets ON tickets.id = comments.ticketId`;
     let conditions = [];
     const role = req.user.user.role;
 
     if (req.data.fromDate && req.data.toDate)
-      conditions.push(this._FilterByBetweenDates(req.data.fromDate, req.data.toDate));
+      conditions.push(
+        this._FilterByBetweenDates(req.data.fromDate, req.data.toDate)
+      );
     else if (req.data.fromDate)
       conditions.push(this._FilterDateByMoreThanOrEqual(req.data.fromDate));
     else if (req.data.toDate)
@@ -62,10 +65,10 @@ module.exports = class TicketModel {
     }
     if (role == UserEnum.SUPPORT) {
       if (req.data.assigned_to) {
-        conditions.push(`userId = ${req.data.assigned_to}`)
+        conditions.push(`userId = ${req.data.assigned_to}`);
       }
       if (req.data.assigned_operator) {
-        conditions.push(`operator = ${req.user.user.id}`)
+        conditions.push(`operator = ${req.user.user.id}`);
       }
     }
 
@@ -73,67 +76,93 @@ module.exports = class TicketModel {
       conditions.push(`tickets.status = '${req.data.status}'`);
     }
     if (conditions.length > 0) {
-      query += (' WHERE ' + conditions.join(' AND '));
+      query += " WHERE " + conditions.join(" AND ");
     }
     return await orm.alfaOrm.query(query);
   }
 
-
   async assignToOperator(req, res) {
-    let ticket = await orm.alfaOrm.find('tickets', 'id', req.data.ticketId);
+    let ticket = await orm.alfaOrm.find("tickets", "id", req.data.ticketId);
 
     if (ticket && ticket.rows && ticket.rows.length) {
-      const withoutOperator = ticket.rows.find(item => item.operator == undefined);
-      const notSolved = ticket.rows.find(item => item.solved == false)
+      const withoutOperator = ticket.rows.find(
+        (item) => item.operator == undefined
+      );
+      const notSolved = ticket.rows.find((item) => item.solved == false);
       if (withoutOperator && notSolved) {
-        const query =
-          `UPDATE tickets SET
+        const query = `UPDATE tickets SET
          operator = ${req.user.user.id},
          status = '${TicketStatusEnum.IN_PROGRESS}'
-         where id = ${ticket.rows[0].id} RETURNING *`
+         where id = ${ticket.rows[0].id} RETURNING *`;
 
         return await orm.alfaOrm.query(query);
       } else {
-        throw new Error_403('This ticket has already been resolved or has an operator')
+        throw new Error_403(
+          "This ticket has already been resolved or has an operator"
+        );
       }
     } else {
-      throw new Error_404('not Found Ticket')
+      throw new Error_404("not Found Ticket");
     }
-
   }
 
   async reply(req, res) {
-    const ticket = await orm.alfaOrm.find('tickets', 'id', req.data.ticketId);
+    const ticket = await orm.alfaOrm.find("tickets", "id", req.data.ticketId);
     if (ticket && ticket.rows && ticket.rows.length) {
-
-      const user = req.user.user
-      const canReply = ticket.rows.some(item => item.operator == user.id || item.userId == user.id)
-      const notSolved = ticket.rows.find(x => x.solved == false);
+      const user = req.user.user;
+      const canReply = ticket.rows.some(
+        (item) => item.operator == user.id || item.userId == user.id
+      );
+      const notSolved = ticket.rows.find((x) => x.solved == false);
       if (canReply && notSolved) {
         const commentDto = {
           subject: req.data.subject,
           content: req.data.content,
           liked: req.data.liked || false,
           ticketId: ticket.rows[0].id,
-          creator: req.user.user.role == UserEnum.SUPPORT ? 'SUPPORT' : 'EMPLOYEE'
-        }
+          creator:
+            req.user.user.role == UserEnum.SUPPORT ? "SUPPORT" : "EMPLOYEE",
+        };
         return await orm.alfaOrm.save(commentDto, "comments");
       }
-      throw new Error_403('ticket answered or not Access User')
+      throw new Error_403("ticket answered or not Access User");
     }
-    throw new Error_404('not Found Ticket ')
+    throw new Error_404("not Found Ticket ");
+  }
+
+  async completedTicket(req, res) {
+    const ticket = await orm.alfaOrm.find("tickets", "id", req.data.ticketId);
+    if (ticket && ticket.rows && ticket.rows.length) {
+      const isAccess = ticket.rows.find(
+        (item) =>
+          item.solved == false &&
+          item.status != TicketStatusEnum.COMPLETED &&
+          item.completed_At == null &&
+          item.userid == req.user.user.id
+      );
+    
+      if (isAccess) {
+        const query = `UPDATE tickets SET
+            status = '${TicketStatusEnum.COMPLETED}',
+            completed_At = current_timestamp,
+            solved = true
+            where id = ${ticket.rows[0].id} RETURNING *`;
+        return await orm.alfaOrm.query(query);
+      }
+      throw new Error_403("you not access to completed");
+    }
+    throw new Error_404("not found Ticket");
   }
 
   _FilterDateByLessThanOrEqual(toDate) {
-    return (`comments.created_at <= '${toDate}' `);
+    return `comments.created_at <= '${toDate}' `;
   }
 
   _FilterDateByMoreThanOrEqual(fromDate) {
-    return (`comments.created_at >= '${fromDate}' `);
+    return `comments.created_at >= '${fromDate}' `;
   }
 
   _FilterByBetweenDates(fromDate, toDate) {
-    return (`comments.created_at BETWEEN '${fromDate}' AND '${toDate}' `);
+    return `comments.created_at BETWEEN '${fromDate}' AND '${toDate}' `;
   }
-
 };
