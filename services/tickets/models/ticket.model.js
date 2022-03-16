@@ -45,7 +45,7 @@ module.exports = class TicketModel {
 
     let query =
       `SELECT 
-    subject,content,category,liked,status,tickets.created_at,tickets.id
+    subject,content,category,liked,status,comments.created_at
      FROM comments LEFT JOIN tickets ON tickets.id = comments.ticketId`;
     let conditions = [];
     const role = req.user.user.role;
@@ -72,13 +72,9 @@ module.exports = class TicketModel {
     if (req.data.status) {
       conditions.push(`status = '${req.data.status}'`);
     }
-
-
     if (conditions.length > 0) {
       query += (' WHERE ' + conditions.join(' AND '));
     }
-
-
     return await orm.alfaOrm.query(query);
   }
 
@@ -89,7 +85,6 @@ module.exports = class TicketModel {
     if (ticket && ticket.rows && ticket.rows.length) {
       const withoutOperator = ticket.rows.find(item => item.operator == undefined);
       const notSolved = ticket.rows.find(item => item.solved == false)
-
       if (withoutOperator && notSolved) {
         const query =
           `UPDATE tickets SET
@@ -130,15 +125,15 @@ module.exports = class TicketModel {
   }
 
   _FilterDateByLessThanOrEqual(toDate) {
-    return (`tickets.created_at <= '${toDate}' `);
+    return (`comments.created_at <= '${toDate}' `);
   }
 
   _FilterDateByMoreThanOrEqual(fromDate) {
-    return (`tickets.created_at >= '${fromDate}' `);
+    return (`comments.created_at >= '${fromDate}' `);
   }
 
   _FilterByBetweenDates(fromDate, toDate) {
-    return (`tickets.created_at BETWEEN '${fromDate}' AND '${toDate}' `);
+    return (`comments.created_at BETWEEN '${fromDate}' AND '${toDate}' `);
   }
 
 };
