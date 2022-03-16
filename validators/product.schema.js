@@ -3,4 +3,5 @@ const Joi = require("joi");
 
 module.exports = Joi.object({
   assigned_to: Joi.string().required(),
+  title:Joi.allow()
 });
