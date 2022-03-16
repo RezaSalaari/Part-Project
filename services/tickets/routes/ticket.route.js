@@ -33,7 +33,7 @@ module.exports = {
       },
     },
     '/tickets/support':{
-      POST:{
+      PUT:{
         function: ticketController.assignToOperator,
         middlewares: [
           dataParser,
