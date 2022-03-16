@@ -70,7 +70,7 @@ module.exports = class TicketModel {
     }
 
     if (req.data.status) {
-      conditions.push(`status = '${req.data.status}'`);
+      conditions.push(`tickets.status = '${req.data.status}'`);
     }
     if (conditions.length > 0) {
       query += (' WHERE ' + conditions.join(' AND '));
