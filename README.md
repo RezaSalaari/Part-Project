@@ -22,7 +22,7 @@ v6.14.13
 
 - [Project Name](#project-name)
   - [Prerequisites](#prerequisites)
-  -[API LINK](#collection-postman)
+  - [API LINK](#collection-postman)
   - [Table of contents](#table-of-contents)
   - [Getting Started](#getting-started)
   - [Installation](#installation)
