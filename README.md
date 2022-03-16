@@ -98,8 +98,10 @@ generated distribution version of the project.
 ## collection-postman
 Through the following link, you can use all the APIs used in this project
 
- Enter the link below, right-click on the collection name on the left, select the Export option and select the Export option again.
- 
+ step 1 -Enter the link below, right-click on the collection name on the left, select the Export option and select the Export option again.
+
+step 2 - Log in via Auth / login to receive the token and then enter it in the Environments section
+
  (https://www.postman.com/cloudy-star-737120/workspace/part-project/overview)
 ## Authors
 
