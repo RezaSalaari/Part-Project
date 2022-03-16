@@ -42,6 +42,17 @@ module.exports = {
         ],
         roles: [UserEnum.SUPPORT],
       },
+      },
+      '/tickets/reply':{
+        POST:{
+          function: ticketController.reply,
+          middlewares: [
+            dataParser,
+            isAuthenticate,
+            isAccess,
+          ],
+          roles: [UserEnum.SUPPORT,UserEnum.EMPLOYE],
+        },
       }
     }
 

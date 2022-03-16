@@ -107,6 +107,27 @@ module.exports = class TicketModel {
 
   }
 
+  async reply(req, res) {
+    const ticket = await orm.alfaOrm.find('tickets', 'id', req.data.ticketId);
+    if (ticket && ticket.rows && ticket.rows.length) {
+
+      const user = req.user.user
+      const canReply = ticket.rows.some(item => item.operator == user.id || item.userId == user.id)
+      const notSolved = ticket.rows.find(x => x.solved == false);
+      if (canReply && notSolved) {
+        const commentDto = {
+          subject: req.data.subject,
+          content: req.data.content,
+          liked: req.data.liked || false,
+          ticketId: ticket.rows[0].id,
+          creator: req.user.user.role == UserEnum.SUPPORT ? 'SUPPORT' : 'EMPLOYEE'
+        }
+        return await orm.alfaOrm.save(commentDto, "comments");
+      }
+      throw new Error_403('ticket answered or not Access User')
+    }
+    throw new Error_404('not Found Ticket ')
+  }
 
   _FilterDateByLessThanOrEqual(toDate) {
     return (`tickets.created_at <= '${toDate}' `);
@@ -119,4 +140,5 @@ module.exports = class TicketModel {
   _FilterByBetweenDates(fromDate, toDate) {
     return (`tickets.created_at BETWEEN '${fromDate}' AND '${toDate}' `);
   }
+
 };
