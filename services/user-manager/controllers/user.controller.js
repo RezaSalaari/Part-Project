@@ -15,7 +15,7 @@ module.exports = class UserController {
   async createUser(req, res) {
     const user = await userModel.save(req, res);
     if (user) {
-      return response.Response_200_Data(req, res, user);
+      return response.Response_200_Data(req, res, {...user.rows});
     } else {
       return response.Response_409_Data(req, res, {
         message: "Username Conflict !!! ",
